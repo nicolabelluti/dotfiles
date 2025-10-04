@@ -3,11 +3,13 @@
 # ~/.dotfiles 🏡
 
 [![chezmoi](https://img.shields.io/badge/chezmoi-4051b5)](https://chezmoi.io/)
+[![Ansible](https://img.shields.io/badge/Ansible-ee0000?logo=ansible)](https://ansible.com/)
 [![MIT License](https://img.shields.io/badge/License-MIT-dark_green)](https://choosealicense.com/licenses/mit/)
 
 </div><br>
 
-> My dotfiles, managed with [chezmoi](https://chezmoi.io/)
+> My dotfiles, managed with [chezmoi](https://chezmoi.io/) and
+> [Ansible](https://ansible.com/)
 
 ## Usage
 

@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# Check is the script is being run using chezmoi
+{{- if false }}
+echo "This script must be run using chezmoi! Aborting..."
+exit 1
+{{- end }}
+
+# Run this script only on Arch Linux
+{{- if ne .chezmoi.osRelease.id "arch" }}
+exit 0
+{{- end }}
+
+# Make the script stop if something goes wrong:
+# -e: any command fails
+# -u: unset variable is used
+# -o pipefail: a pipeline fails if any command fails
+set -euo pipefail
+
+# Show a clear error before exiting
+SCRIPT_PATH="{{ trimPrefix "/" (trimPrefix .chezmoi.workingTree (joinPath .chezmoi.sourceDir .chezmoi.sourceFile)) }}"
+trap 'echo -e "\n\033[1;31mError: Script \"$SCRIPT_PATH\" failed at line $LINENO\033[0m\n" >&2; exit 1' ERR
+
+# </init>
+# <core>
+
+# Check if python3 and python3-venv are installed
+if ! command -v python3 >/dev/null 2>&1; then
+  echo -e "\e[1;34mpython3 not found. Installing it...\e[0m"
+  sudo pacman --noconfirm -Sy python
+fi
+
+ANSIBLE_ROOT="{{ .chezmoi.workingTree }}/setup-script"
+
+# Check if there is a venv in "setup-script/"
+if [ ! -d "$ANSIBLE_ROOT/.venv" ]; then
+    echo -e "\e[1;34mNo venv found in "$ANSIBLE_ROOT". Creating one...\e[0m"
+    python3 -m venv "$ANSIBLE_ROOT/.venv"
+
+    echo -e "\e[1;34mInstalling the dependencies...\e[0m"
+    "$ANSIBLE_ROOT/.venv/bin/pip3" install -r "$ANSIBLE_ROOT/requirements.txt"
+fi
+
+# Run the playbook
+echo -e "\e[1;34mRunning the playbook...\e[0m"
+ANSIBLE_CONFIG="$ANSIBLE_ROOT/ansible.cfg" \
+    "$ANSIBLE_ROOT/.venv/bin/ansible-playbook" \
+    "$ANSIBLE_ROOT/playbook.yaml" \
+    --extra-vars "$(chezmoi data --format=json)"
