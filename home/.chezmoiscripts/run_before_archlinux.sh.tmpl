@@ -46,4 +46,5 @@ echo -e "\e[1;34mRunning the playbook...\e[0m"
 ANSIBLE_CONFIG="$ANSIBLE_ROOT/ansible.cfg" \
     "$ANSIBLE_ROOT/.venv/bin/ansible-playbook" \
     "$ANSIBLE_ROOT/playbook.yaml" \
-    --extra-vars "$(chezmoi data --format=json)"
+    --extra-vars "$(chezmoi data --format=json)" \
+    --ask-become-pass

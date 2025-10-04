@@ -11,7 +11,6 @@
           - chezmoi is mapping
         fail_msg: 'Pass with: --extra-vars "$(chezmoi data --format=json)"'
 
-    - name: 'Example: access the "user" fields'
-      ansible.builtin.debug:
-        msg:
-          - "user: {{ chezmoi.username | default('n/a') }}"
+  roles:
+    - role: shell
+      when: features.shell == true
