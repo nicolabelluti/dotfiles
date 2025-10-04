@@ -1,0 +1,17 @@
+- name: Prepare the base environment
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    - name: 'Ensure the "chezmoi" variable is set'
+      ansible.builtin.assert:
+        that:
+          - chezmoi is not undefined
+          - chezmoi is mapping
+        fail_msg: 'Pass with: --extra-vars "$(chezmoi data --format=json)"'
+
+    - name: 'Example: access the "user" fields'
+      ansible.builtin.debug:
+        msg:
+          - "user: {{ chezmoi.username | default('n/a') }}"
