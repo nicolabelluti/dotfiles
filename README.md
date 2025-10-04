@@ -25,3 +25,15 @@ chezmoi init git.nicolabelluti.me/nicolabelluti
 # Apply the dotfiles
 chezmoi apply
 ```
+
+If you want to update the dotfiles:
+
+```sh
+chezmoi update --init
+```
+
+To give a new answer to the prompts:
+
+```sh
+chezmoi init --prompt
+```
