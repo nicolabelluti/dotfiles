@@ -11,6 +11,7 @@
   failed_when: fish_path.rc != 0
 
 - name: Set the user's shell
+  become: true
   ansible.builtin.user:
     name: "{{ chezmoi.username }}"
     shell: "{{ fish_path.stdout }}"
