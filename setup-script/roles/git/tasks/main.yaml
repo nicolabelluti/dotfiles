@@ -1,0 +1,5 @@
+- name: Install Git on Arch
+  become: true
+  ansible.builtin.pacman:
+    name: git
+  when: chezmoi.osRelease.id == "arch"

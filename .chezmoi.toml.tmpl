@@ -1,4 +1,13 @@
-{{ $shell := promptBoolOnce . "features.shell" "Do you want to install the Fish shell?" true }}
+{{- $email := promptStringOnce . "email" "What's your email?" }}
+{{- $git_name := promptStringOnce . "git_name" "What's your Git name?" }}
+
+{{- $shell := promptBoolOnce . "features.shell" "Do you want to install the Fish shell?" true }}
+{{- $git := promptBoolOnce . "features.git" "Do you want to install Git?" true }}
+
+[data]
+email = {{ $email | quote }}
+git_name = {{ $git_name | quote }}
 
 [data.features]
 shell = {{ $shell }}
+git = {{ $git }}

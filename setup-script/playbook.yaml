@@ -25,3 +25,5 @@
   roles:
     - role: shell
       when: features.shell == true
+    - role: git
+      when: features.git == true
