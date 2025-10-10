@@ -1,1 +1,4 @@
-home/.chezmoi.toml.tmpl
+{{ $shell := promptBoolOnce . "features.shell" "Do you want to install the Fish shell?" true }}
+
+[data.features]
+shell = {{ $shell }}
