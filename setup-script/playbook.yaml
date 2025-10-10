@@ -4,12 +4,23 @@
   gather_facts: false
 
   pre_tasks:
-    - name: 'Ensure the "chezmoi" variable is set'
+    - name: Ensure the "chezmoi" variable is set
       ansible.builtin.assert:
         that:
           - chezmoi is not undefined
           - chezmoi is mapping
         fail_msg: 'Pass with: --extra-vars "$(chezmoi data --format=json)"'
+
+    - name: Verify the become password is correct
+      become: true
+      ansible.builtin.command:
+        cmd: "true"
+      changed_when: false
+
+    - name: Verify the distro
+      ansible.builtin.debug:
+        msg: "The setup script for now supports only Arch Linux!"
+      when: chezmoi.osRelease.id != "arch"
 
   roles:
     - role: shell
