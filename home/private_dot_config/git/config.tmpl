@@ -17,3 +17,14 @@ ff = true
 [credential]
 helper = {{ $credentialHelperPath }}
 {{- end }}
+
+{{- $projectsDir := joinPath .chezmoi.homeDir "Projects" }}
+{{- if stat $projectsDir }}
+{{-   $projects := output "find" $projectsDir "-type" "f" "-mindepth" "2" "-maxdepth" "2" "-name" ".gitconfig" | trim | splitList "\n" }}
+{{-   range $projects }}
+{{-     if . }}
+[includeIf "gitdir:{{ . | dir }}/**/"]
+path = {{ . }}
+{{-     end }}
+{{-   end }}
+{{- end }}
