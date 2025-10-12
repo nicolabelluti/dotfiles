@@ -1,9 +1,19 @@
 [user]
-  email = {{ .email }}
-  name = {{ .git_name }}
+email = {{ .email }}
+name = {{ .git_name }}
 
 [init]
-  defaultBranch = main
+defaultBranch = main
 
 [merge]
-  ff = true
+ff = true
+
+{{- $credentialHelperPath := "" }}
+{{- if eq .chezmoi.osRelease.id "arch" }}
+{{-   $credentialHelperPath = "/usr/lib/git-core/git-credential-libsecret" }}
+{{- end }}
+
+{{- if $credentialHelperPath }}
+[credential]
+helper = {{ $credentialHelperPath }}
+{{- end }}
