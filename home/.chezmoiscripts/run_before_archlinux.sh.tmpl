@@ -24,6 +24,20 @@ trap 'echo -e "\n\033[1;31mError: Script \"$SCRIPT_PATH\" failed at line $LINENO
 # </init>
 # <core>
 
+while true; do
+  read -p "Do you want to run the setup script? [Y/n]: " -n 1 -r REPLY
+  echo
+
+  # Convert to lowercase and default to 'y' if empty
+  REPLY=${REPLY:-y}
+
+  case $REPLY in
+    Y|y|1) break ;;
+    N|n|0) exit 0 ;;
+    *) echo "Invalid input. Please enter y or n." ;;
+  esac
+done
+
 # Check if python3 and python3-venv are installed
 if ! command -v python3 >/dev/null 2>&1; then
   echo -e "\e[1;34mpython3 not found. Installing it...\e[0m"
