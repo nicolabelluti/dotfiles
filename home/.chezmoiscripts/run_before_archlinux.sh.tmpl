@@ -24,8 +24,12 @@ trap 'echo -e "\n\033[1;31mError: Script \"$SCRIPT_PATH\" failed at line $LINENO
 # </init>
 # <core>
 
+# Ask for confirmation before running the script
 while true; do
   read -p "Do you want to run the setup script? [Y/n]: " -n 1 -r REPLY
+
+  # Clear the input buffer and add a newline
+  while read -t 0.001 TMP; do continue; done
   echo
 
   # Convert to lowercase and default to 'y' if empty
