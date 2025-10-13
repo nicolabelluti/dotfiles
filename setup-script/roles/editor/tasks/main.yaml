@@ -1,0 +1,5 @@
+- name: Install Neovim on Arch
+  become: true
+  ansible.builtin.pacman:
+    name: neovim
+  when: chezmoi.osRelease.id == "arch"

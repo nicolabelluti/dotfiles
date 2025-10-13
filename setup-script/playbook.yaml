@@ -27,3 +27,5 @@
       when: features.shell == true
     - role: git
       when: features.git == true
+    - role: editor
+      when: features.editor == true

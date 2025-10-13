@@ -1,0 +1,7 @@
+abbr --add --position command l ls -lAh
+
+{{- if .features.editor }}
+# Alias `vi` and `vim` to Neovim
+abbr --add --position command vim nvim
+abbr --add --position command vi nvim
+{{- end }}
