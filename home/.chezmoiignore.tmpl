@@ -1,6 +1,8 @@
 {{- if not .features.shell }}
 .config/fish
+.config/starship.toml
 {{- end }}
+
 {{- if not .features.git }}
 .config/git
 {{- end }}

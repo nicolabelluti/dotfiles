@@ -1,7 +1,10 @@
-- name: Install Fish shell on Arch
+- name: Install Fish shell and Starship on Arch
   become: true
   ansible.builtin.pacman:
-    name: fish
+    name:
+      - fish
+      - starship
+      - ttf-nerd-fonts-symbols  # Required for Starship
   when: chezmoi.osRelease.id == "arch"
 
 - name: Find Fish shell binary
