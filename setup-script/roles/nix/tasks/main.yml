@@ -1,0 +1,12 @@
+- name: Install Nix on Arch
+  become: true
+  ansible.builtin.pacman:
+    name: nix
+  when: chezmoi.osRelease.id == "arch"
+
+- name: Start the Nix daemon
+  become: true
+  ansible.builtin.systemd_service:
+    name: nix-daemon
+    enabled: true
+    state: started

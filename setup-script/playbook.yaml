@@ -29,3 +29,5 @@
       when: features.git == true
     - role: editor
       when: features.editor == true
+    - role: nix
+      when: features.nix == true

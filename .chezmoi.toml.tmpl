@@ -4,6 +4,7 @@
 {{- $shell := promptBoolOnce . "features.shell" "Do you want to install the Fish shell" true }}
 {{- $git := promptBoolOnce . "features.git" "Do you want to install Git" true }}
 {{- $editor := promptBoolOnce . "features.editor" "Do you want to install Neovim" true }}
+{{- $nix := promptBoolOnce . "features.editor" "Do you want to install the Nix package manager" true }}
 
 [data]
 email = {{ $email | quote }}
@@ -13,3 +14,4 @@ git_name = {{ $git_name | quote }}
 shell = {{ $shell }}
 git = {{ $git }}
 editor = {{ $editor }}
+nix = {{ $nix }}

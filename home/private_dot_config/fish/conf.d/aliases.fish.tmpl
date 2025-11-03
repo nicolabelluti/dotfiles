@@ -5,3 +5,7 @@ abbr --add --position command l ls -lAh
 abbr --add --position command vim nvim
 abbr --add --position command vi nvim
 {{- end }}
+
+{{- if .features.nix }}
+abbr --add --position command nd 'nix develop --command $SHELL'
+{{- end }}

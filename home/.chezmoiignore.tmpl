@@ -10,3 +10,7 @@
 {{- if not .features.editor }}
 .config/nvim
 {{- end }}
+
+{{- if not .features.nix }}
+.config/nix
+{{- end }}
