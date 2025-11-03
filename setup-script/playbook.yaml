@@ -31,3 +31,5 @@
       when: features.editor == true
     - role: nix
       when: features.nix == true
+    - role: paru
+      when: chezmoi.osRelease.id == "arch" and features.paru == true

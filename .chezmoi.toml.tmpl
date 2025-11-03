@@ -6,6 +6,11 @@
 {{- $editor := promptBoolOnce . "features.editor" "Do you want to install Neovim" true }}
 {{- $nix := promptBoolOnce . "features.editor" "Do you want to install the Nix package manager" true }}
 
+{{- $paru := false -}}
+{{ if eq .chezmoi.osRelease.id "arch" -}}
+  {{- $paru = promptBoolOnce . "features.editor" "Do you want to install the Paru package manager" true -}}
+{{- end }}
+
 [data]
 email = {{ $email | quote }}
 git_name = {{ $git_name | quote }}
@@ -15,3 +20,4 @@ shell = {{ $shell }}
 git = {{ $git }}
 editor = {{ $editor }}
 nix = {{ $nix }}
+paru = {{ $paru }}

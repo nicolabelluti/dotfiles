@@ -1,0 +1,50 @@
+- name: Ensure build prerequisites are present
+  become: true
+  ansible.builtin.pacman:
+    name:
+      - base-devel
+      - fakeroot
+
+- name: Create temporary dir for build
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: paru
+  register: paru_tmp
+
+- name: Download the AUR snapshot
+  ansible.builtin.get_url:
+    url: "https://aur.archlinux.org/cgit/aur.git/snapshot/paru-bin.tar.gz"
+    dest: "{{ paru_tmp.path }}/paru-bin.tar.gz"
+
+- name: Extract the snapshot
+  ansible.builtin.unarchive:
+    src: "{{ paru_tmp.path }}/paru-bin.tar.gz"
+    dest: "{{ paru_tmp.path }}"
+    remote_src: true
+
+- name: Build the package (no install)
+  ansible.builtin.command:
+    cmd: makepkg --syncdeps --noconfirm
+    chdir: "{{ paru_tmp.path }}/paru-bin"
+  environment:
+    PKGDEST: "{{ paru_tmp.path }}/paru-bin"
+
+- name: Locate built package(s)
+  ansible.builtin.find:
+    paths: "{{ paru_tmp.path }}/paru-bin"
+    patterns: "*.pkg.tar.zst"
+    file_type: file
+  register: built_pkgs
+
+# Install with root, but OUTSIDE makepkg
+- name: Install built package(s)
+  become: true
+  ansible.builtin.command:
+    cmd: "pacman -U --noconfirm {{ item.path }}"
+    creates: /usr/bin/paru
+  loop: "{{ built_pkgs.files }}"
+
+- name: Remove temporary directory
+  ansible.builtin.file:
+    path: "{{ paru_tmp.path }}"
+    state: absent
