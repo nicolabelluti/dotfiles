@@ -1,3 +1,14 @@
+- name: Check if paru is already installed
+  ansible.builtin.pacman:
+    name: paru
+    state: present
+  check_mode: true
+  register: is_paru_installed
+
+- name: Stop the role if paru is already installed
+  when: not is_paru_installed.changed
+  ansible.builtin.meta: end_role
+
 - name: Ensure build prerequisites are present
   become: true
   ansible.builtin.pacman:
@@ -13,25 +24,25 @@
 
 - name: Download the AUR snapshot
   ansible.builtin.get_url:
-    url: "https://aur.archlinux.org/cgit/aur.git/snapshot/paru-bin.tar.gz"
-    dest: "{{ paru_tmp.path }}/paru-bin.tar.gz"
+    url: "https://aur.archlinux.org/cgit/aur.git/snapshot/paru.tar.gz"
+    dest: "{{ paru_tmp.path }}/paru.tar.gz"
 
 - name: Extract the snapshot
   ansible.builtin.unarchive:
-    src: "{{ paru_tmp.path }}/paru-bin.tar.gz"
+    src: "{{ paru_tmp.path }}/paru.tar.gz"
     dest: "{{ paru_tmp.path }}"
     remote_src: true
 
 - name: Build the package (no install)
   ansible.builtin.command:
     cmd: makepkg --syncdeps --noconfirm
-    chdir: "{{ paru_tmp.path }}/paru-bin"
+    chdir: "{{ paru_tmp.path }}/paru"
   environment:
-    PKGDEST: "{{ paru_tmp.path }}/paru-bin"
+    PKGDEST: "{{ paru_tmp.path }}/paru"
 
 - name: Locate built package(s)
   ansible.builtin.find:
-    paths: "{{ paru_tmp.path }}/paru-bin"
+    paths: "{{ paru_tmp.path }}/paru"
     patterns: "*.pkg.tar.zst"
     file_type: file
   register: built_pkgs
