@@ -1,0 +1,14 @@
+#
+# SSH per-host connection settings (user, keys, options, etc.)
+#
+# Example:
+#
+# ```
+# Host host.example.org
+#   User user
+#   IdentityFile ~/.ssh/keys/private-key
+# ```
+#
+
+
+
