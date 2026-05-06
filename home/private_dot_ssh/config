@@ -1,0 +1,5 @@
+AddKeysToAgent yes
+User root
+IdentityFile ~/.ssh/keys/default
+
+Include hosts
