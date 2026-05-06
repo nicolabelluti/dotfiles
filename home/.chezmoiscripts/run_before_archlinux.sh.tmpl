@@ -50,6 +50,28 @@ fi
 
 ANSIBLE_ROOT="{{ .chezmoi.workingTree }}/setup-script"
 
+# If a venv exists, check if it's still valid
+if [ -d "$ANSIBLE_ROOT/.venv" ]; then
+    VENV_PYTHON="$ANSIBLE_ROOT/.venv/bin/python3"
+    SYS_PYTHON_VERSION=$(python3 -c "import sys; print(sys.version_info[:2])")
+    VENV_OK=true
+
+    # Check if the Python binary inside the venv is functional
+    if ! "$VENV_PYTHON" --version >/dev/null 2>&1; then
+        echo -e "\e[1;33mVenv Python binary is broken.\e[0m"
+        VENV_OK=false
+    # Check if the venv Python version matches the system Python version
+    elif [ "$("$VENV_PYTHON" -c "import sys; print(sys.version_info[:2])")" != "$SYS_PYTHON_VERSION" ]; then
+        echo -e "\e[1;33mVenv Python version mismatch with system Python.\e[0m"
+        VENV_OK=false
+    fi
+
+    if [ "$VENV_OK" = false ]; then
+        echo -e "\e[1;34mDeleting the invalid venv...\e[0m"
+        rm -rf "$ANSIBLE_ROOT/.venv"
+    fi
+fi
+
 # Check if there is a venv in "setup-script/"
 if [ ! -d "$ANSIBLE_ROOT/.venv" ]; then
     echo -e "\e[1;34mNo venv found in "$ANSIBLE_ROOT". Creating one...\e[0m"
